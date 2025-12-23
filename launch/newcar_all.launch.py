@@ -56,7 +56,7 @@ def generate_launch_description():
         name='bridge_odom',
         output='screen',
         arguments=[
-            '/model/newcar/odometry@nav_msgs/msg/Odometry[gz.msgs.Odometry]'
+            '/model/newcar/odometry@nav_msgs/msg/Odometry[gz.msgs.Odometry'
         ],
         parameters=[{'use_sim_time': use_sim_time}],
     )
@@ -67,7 +67,7 @@ def generate_launch_description():
         name='bridge_scan',
         output='screen',
         arguments=[
-            '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan]'
+            '/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan'
         ],
         parameters=[{'use_sim_time': use_sim_time}],
     )
@@ -78,7 +78,7 @@ def generate_launch_description():
         name='bridge_clock',
         output='screen',
         arguments=[
-            '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock]'
+            '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock'
         ],
         parameters=[{'use_sim_time': use_sim_time}],
     )
