@@ -1,0 +1,430 @@
+<?xml version="1.0" ?>
+<sdf version="1.8">
+    <world name="campus_world">
+        <include>
+            <uri>file:///home/deyung/ros2_newws/src/mymasterproject/src/world/road.sdf</uri>
+            <pose>0 0 0 0 0 0</pose> <!-- Maze at origin -->
+        </include>
+
+        <include> 
+              <uri>file:///home/deyung/ros2_newws/src/mymasterproject/src/vehicle_blue_description/models/model.sdf</uri>
+              <name>vehicle_blue</name> 
+            <pose>0 0 0 0 0 0</pose> 
+        </include>
+        <physics name="1ms" type="ignored">
+            <max_step_size>0.001</max_step_size>
+            <real_time_factor>1.0</real_time_factor>
+        </physics>
+        
+        <plugin filename="libactor_pose_ros2.so" name="actor_pose_ros2">
+          <base_frame>world</base_frame>
+          <name_prefix>actor_</name_prefix>           <!-- only publish entities whose name starts with this -->
+          <pose_topic>/actors/poses</pose_topic>      <!-- PoseArray of all actors -->
+          <pose_topic_prefix>/actors/</pose_topic_prefix>  <!-- per-actor PoseStamped at /actors/<name>/pose -->
+          <actor_yaw_offset_deg>-90</actor_yaw_offset_deg> <!-- align mesh +Y → ROS +X -->
+          <publish_tf>true</publish_tf>               <!-- also broadcast TF world→actor_name -->
+        </plugin>
+        <!-- Moving Forward-->
+        <plugin 
+            filename="gz-sim-triggered-publisher-system"
+            name="gz::sim::systems::TriggeredPublisher">
+            <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+            <match field="data">16777235</match>
+            </input>
+            <output type="gz.msgs.Twist" topic="/cmd_vel">
+            linear: {x: 2}, angular: {z: 0.0}
+            </output>
+        </plugin>
+        <!-- Moving Backward-->
+        <plugin filename="gz-sim-triggered-publisher-system"
+               name="gz::sim::systems::TriggeredPublisher">
+           <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+               <match field="data">16777237</match>
+           </input>
+           <output type="gz.msgs.Twist" topic="/cmd_vel">
+               linear: {x: -2}, angular: {z: 0.0}
+           </output>
+        </plugin>
+        <!-- Left turn-->
+         <plugin filename="gz-sim-triggered-publisher-system"
+               name="gz::sim::systems::TriggeredPublisher">
+           <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+               <match field="data">16777234</match>
+           </input>
+           <output type="gz.msgs.Twist" topic="/cmd_vel">
+               linear: {x: 0.01}, angular: {z: 2}
+           </output>
+        </plugin>
+        <!-- Right turn-->
+         <plugin filename="gz-sim-triggered-publisher-system"
+               name="gz::sim::systems::TriggeredPublisher">
+           <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+               <match field="data">16777236</match>
+           </input>
+           <output type="gz.msgs.Twist" topic="/cmd_vel">
+               linear: {x: 0.01}, angular: {z: -2}
+           </output>
+        </plugin>
+        <!-- Stop-->
+         <plugin filename="gz-sim-triggered-publisher-system"
+               name="gz::sim::systems::TriggeredPublisher">
+           <input type="gz.msgs.Int32" topic="/keyboard/keypress">
+               <match field="data">80</match>
+           </input>
+           <output type="gz.msgs.Twist" topic="/cmd_vel">
+               linear: {x: 0}, angular: {z: 0}
+           </output>
+        </plugin>
+        <plugin
+            filename="gz-sim-sensors-system"
+            name="gz::sim::systems::Sensors">
+            <render_engine>ogre2</render_engine>
+        </plugin>
+        <plugin
+            filename="gz-sim-physics-system"
+            name="gz::sim::systems::Physics">
+        </plugin>
+        <plugin
+            filename="gz-sim-user-commands-system"
+            name="gz::sim::systems::UserCommands">
+        </plugin>
+        <plugin
+            filename="gz-sim-scene-broadcaster-system"
+            name="gz::sim::systems::SceneBroadcaster">
+        </plugin>
+        <plugin 
+            filename="gz-sim-imu-system"
+            name="gz::sim::systems::Imu">
+        </plugin>
+        <plugin 
+            filename="gz-sim-contact-system"
+            name="gz::sim::systems::Contact">
+        </plugin>
+
+        <light type="directional" name="sun">
+            <cast_shadows>true</cast_shadows>
+            <pose>0 0 10 0 0 0</pose>
+            <diffuse>0.8 0.8 0.8 1</diffuse>
+            <specular>0.2 0.2 0.2 1</specular>
+            <attenuation>
+                <range>1000</range>
+                <constant>0.9</constant>
+                <linear>0.01</linear>
+                <quadratic>0.001</quadratic>
+            </attenuation>
+            <direction>-0.5 0.1 -0.9</direction>
+        </light>
+
+        <model name="ground_plane">
+            <static>true</static>
+            <link name="link">
+                <collision name="collision">
+                <geometry>
+                    <plane>
+                    <normal>0 0 1</normal>
+                    </plane>
+                </geometry>
+                </collision>
+                <visual name="visual">
+                <geometry>
+                    <plane>
+                    <normal>0 0 1</normal>
+                    <size>100 100</size>
+                    </plane>
+                </geometry>
+                <material>
+                    <ambient>0.8 0.8 0.8 0</ambient>
+                    <diffuse>0.8 0.8 0.8 0</diffuse>
+                    <specular>0.8 0.8 0.8 0</specular>
+                </material>
+                </visual>
+            </link>
+        </model>
+
+        
+
+       
+        <model name="actor_walking1">
+          
+          <pose>3 0 1 0 0 0</pose>
+          <static>false</static>
+
+          <link name="base_link">
+            <inertial><mass>1e-3</mass></inertial>
+            <collision name="c1">
+              <geometry><box><size>0.01 0.01 10</size></box></geometry>
+            </collision>
+            <visual name="mesh">
+              <geometry>
+                <mesh>
+                  <uri>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</uri>
+                </mesh>
+              </geometry>
+              <!-- If your mesh faces +Y, rotate +90deg so forward is +X -->
+              <pose>0 0 0 0 0 1.57079632679</pose>
+            </visual>
+          </link>
+          <frame name="base_footprint" attached_to="base_link">
+            <pose>0 0 -1 0 0 0</pose>
+          </frame>
+          <!-- Move the model along the old actor trajectory -->
+          <plugin filename="libmodel_waypoint_mover.so" name="model_waypoint_mover">
+            <loop>true</loop>
+            <auto_start>true</auto_start>
+            <!-- If you didn't rotate the visual above, use yaw_offset_deg: -90 instead -->
+            <yaw_offset_deg>0</yaw_offset_deg>
+            <trajectory>
+              <waypoint><time>0</time>   <pose>3 -1 1 0 0 0</pose></waypoint>
+              <waypoint><time>2</time>   <pose>5 -1 1 0 0 0</pose></waypoint>
+              <waypoint><time>2.5</time> <pose>5 -1 1 0 0 1.57</pose></waypoint>
+              <waypoint><time>4</time>   <pose>5 1  1 0 0 1.57</pose></waypoint>
+              <waypoint><time>4.5</time> <pose>5 1  1 0 0 3.142</pose></waypoint>
+              <waypoint><time>6</time>   <pose>3 1  1 0 0 3.142</pose></waypoint>
+              <waypoint><time>6.5</time> <pose>3 1  1 0 0 -1.57</pose></waypoint>
+              <waypoint><time>8</time>   <pose>3 -1 1 0 0 -1.57</pose></waypoint>
+              <waypoint><time>8.5</time> <pose>3 -1 1 0 0 0</pose></waypoint>
+            </trajectory>
+          </plugin>
+
+          <!-- Standard model-only publisher: RViz will see TF/world-frame -->
+          <plugin filename="gz-sim-pose-publisher-system"
+                  name="gz::sim::systems::PosePublisher">
+            <publish_tf>true</publish_tf>
+            <update_rate>30</update_rate>
+          </plugin>
+
+
+          <plugin filename="gz-sim-odometry-publisher-system"
+                  name="gz::sim::systems::OdometryPublisher">
+            <topic>/actors/actor_walking1/odom</topic>
+            <frame_id>map</frame_id>
+            <child_frame_id>actor_walking1</child_frame_id>
+            <publish_tf>true</publish_tf>
+            <update_rate>30</update_rate>
+          </plugin>
+        </model>
+
+        <model name="actor_walking2">
+          <pose>0 -5 1 0 0 0</pose>
+          <static>false</static>
+
+          <link name="base_link">
+            <inertial><mass>1e-3</mass></inertial>
+            <collision name="c1">
+              <geometry><box><size>0.01 0.01 10</size></box></geometry>
+            </collision>
+            <visual name="mesh">
+              <geometry>
+                <mesh>
+                  <uri>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</uri>
+                </mesh>
+              </geometry>
+              <!-- If your mesh faces +Y, rotate +90deg so forward is +X -->
+              <pose>0 0 0 0 0 1.57079632679</pose>
+            </visual>
+          </link>
+
+          <!-- Move the model along the old actor trajectory -->
+          <plugin filename="libmodel_waypoint_mover.so" name="model_waypoint_mover">
+            <loop>true</loop>
+            <auto_start>true</auto_start>
+            <!-- If you didn't rotate the visual above, use yaw_offset_deg: -90 instead -->
+            <yaw_offset_deg>0</yaw_offset_deg>
+            <trajectory id="2" type="walk">
+              <waypoint>
+                <time>0</time>
+                <pose>0 -4 1.0 0 0 0</pose>
+              </waypoint>
+              <waypoint>
+                <time>2</time>
+                <pose>2 -4 1.0 0 0 0</pose>
+              </waypoint>
+              <waypoint>
+                <time>2.5</time>
+                <pose>2 -4 1.0 0 0 1.57</pose>
+              </waypoint>
+              <waypoint>
+                <time>4</time>
+                <pose>2 -4 1.0 0 0 1.57</pose>
+              </waypoint>
+              <waypoint>
+                <time>4.5</time>
+                <pose>2 -4 1.0 0 0 3.142</pose>
+              </waypoint>
+              <waypoint>
+                <time>6</time>
+                <pose>0 -4 1 0 0 3.142</pose>
+              </waypoint>
+              <waypoint>
+                <time>6.5</time>
+                <pose>0 -4 1 0 0 -1.57</pose>
+              </waypoint>
+              <waypoint>
+                <time>8</time>
+                <pose>0 -4 1.0 0 0 -1.57</pose>
+              </waypoint>
+              <waypoint>
+                <time>8.5</time>
+                <pose>0 -4 1.0 0 0 0</pose>
+              </waypoint>
+            </trajectory>
+          </plugin>
+
+          <!-- Standard model-only publisher: RViz will see TF/world-frame -->
+          <plugin filename="gz-sim-pose-publisher-system"
+                  name="gz::sim::systems::PosePublisher">
+            <publish_tf>true</publish_tf>
+            <update_rate>30</update_rate>
+          </plugin>
+
+
+          <plugin filename="gz-sim-odometry-publisher-system"
+                  name="gz::sim::systems::OdometryPublisher">
+            <topic>/actors/actor_walking2/odom</topic>
+            <frame_id>map</frame_id>
+            <child_frame_id>actor_walking2</child_frame_id>
+            <publish_tf>true</publish_tf>
+            <update_rate>30</update_rate>
+          </plugin>
+        </model>
+        <model name="actor_walking3">
+          <pose>-10 -3 1 0 0 0</pose>
+          <static>false</static>
+
+          <link name="base_link">
+            <inertial><mass>1e-3</mass></inertial>
+            <collision name="c1">
+              <geometry><box><size>0.01 0.01 10</size></box></geometry>
+            </collision>
+            <visual name="mesh">
+              <geometry>
+                <mesh>
+                  <uri>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</uri>
+                </mesh>
+              </geometry>
+              <!-- If your mesh faces +Y, rotate +90deg so forward is +X -->
+              <pose>0 0 0 0 0 1.57079632679</pose>
+            </visual>
+          </link>
+
+          <!-- Move the model along the old actor trajectory -->
+          <plugin filename="libmodel_waypoint_mover.so" name="model_waypoint_mover">
+            <loop>true</loop>
+            <auto_start>true</auto_start>
+            <!-- If you didn't rotate the visual above, use yaw_offset_deg: -90 instead -->
+            <yaw_offset_deg>0</yaw_offset_deg>
+            <trajectory id="3" type="walk">
+              <waypoint>
+                <time>0</time>
+                <pose>-10 -3 1 0 0 0</pose>
+              </waypoint>
+              <waypoint>
+                <time>2</time>
+                <pose>-8 -3 1 0 0 0</pose>
+              </waypoint>
+              <waypoint>
+                <time>3</time>
+                <pose>-6 -3 1.0 0 0 0</pose>
+              </waypoint>
+              <waypoint>
+                <time>3.5</time>
+                <pose>-6 -3 1.0 0 0 3.14</pose>
+              </waypoint>
+              <waypoint>
+                <time>5.5</time>
+                <pose>-10 -3 1 0 0 3.14</pose>
+              </waypoint>
+              <waypoint>
+                <time>6</time>
+                <pose>-10 -3 1 0 0 0</pose>
+              </waypoint>
+            </trajectory>
+          </plugin>
+
+          <!-- Standard model-only publisher: RViz will see TF/world-frame -->
+          <plugin filename="gz-sim-pose-publisher-system"
+                  name="gz::sim::systems::PosePublisher">
+            <publish_tf>true</publish_tf>
+            <update_rate>30</update_rate>
+          </plugin>
+
+
+          <plugin filename="gz-sim-odometry-publisher-system"
+                  name="gz::sim::systems::OdometryPublisher">
+            <topic>/actors/actor_walking3/odom</topic>
+            <frame_id>map</frame_id>
+            <child_frame_id>actor_walking3</child_frame_id>
+            <publish_tf>true</publish_tf>
+            <update_rate>30</update_rate>
+          </plugin>
+        </model>
+        <model name="actor_walking4">
+          <pose>-2 0 1 0 0 0</pose>
+          <static>false</static>
+
+          <link name="base_link">
+            <inertial><mass>1e-3</mass></inertial>
+            <collision name="c4">
+              <geometry><box><size>0.01 0.01 10</size></box></geometry>
+            </collision>
+            <visual name="mesh">
+              <geometry>
+                <mesh>
+                  <uri>https://fuel.gazebosim.org/1.0/Mingfei/models/actor/tip/files/meshes/walk.dae</uri>
+                </mesh>
+              </geometry>
+              <!-- If your mesh faces +Y, rotate +90deg so forward is +X -->
+              <pose>0 0 0 0 0 1.57079632679</pose>
+            </visual>
+          </link>
+
+          <!-- Move the model along the old actor trajectory -->
+          <plugin filename="libmodel_waypoint_mover.so" name="model_waypoint_mover">
+            <loop>true</loop>
+            <auto_start>true</auto_start>
+            <!-- If you didn't rotate the visual above, use yaw_offset_deg: -90 instead -->
+            <yaw_offset_deg>0</yaw_offset_deg>
+            <trajectory id="4" type="walk">
+              <waypoint>
+                <time>0</time>
+                <pose>-2 0 1 0 0 -1.57</pose>
+              </waypoint>
+              <waypoint>
+                <time>2</time>
+                <pose>-2 -3 1 0 0 -1.57</pose>
+              </waypoint>
+              <waypoint>
+                <time>3</time>
+                <pose>-2 -3 1.0 0 0 1.57</pose>
+              </waypoint>
+              
+              <waypoint>
+                <time>5.5</time>
+                <pose>-2 0 1 0 0 1.57</pose>
+              </waypoint>
+              <waypoint>
+                <time>6</time>
+                <pose>-2 0 1 0 0 -1.57</pose>
+              </waypoint>
+            </trajectory>
+          </plugin>
+
+          <!-- Standard model-only publisher: RViz will see TF/world-frame -->
+          <plugin filename="gz-sim-pose-publisher-system"
+                  name="gz::sim::systems::PosePublisher">
+            <publish_tf>true</publish_tf>
+            <update_rate>30</update_rate>
+          </plugin>
+
+
+          <plugin filename="gz-sim-odometry-publisher-system"
+                  name="gz::sim::systems::OdometryPublisher">
+            <topic>/actors/actor_walking4/odom</topic>
+            <frame_id>map</frame_id>
+            <child_frame_id>actor_walking4</child_frame_id>
+            <publish_tf>true</publish_tf>
+            <update_rate>30</update_rate>
+          </plugin>
+        </model>
+    </world>
+</sdf>
