@@ -48,19 +48,6 @@ URDF/Xacro robot description package for the custom ackermann car.
 ### `actor_pose_ros2`
 C++ package for publishing actor poses and moving waypoints in Gazebo simulation.
 
----
-
-### `maze`
-Assets and path planning scripts used for early maze-solving experiments.
-
-- A* and RRT path planners
-- Maze world SDF files
-- Coordinate CSV files
-
----
-
-### `ekf`
-Standalone EKF configuration file for robot localization.
 
 ---
 
