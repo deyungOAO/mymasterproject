@@ -1,0 +1,7 @@
+image: maze.png     # your PNG file in the same folder
+mode: trinary       # trinary (0/100/-1), or scale for grayscale
+resolution: 0.05    # meters per pixel (change to match your map)
+origin: [-10.0, -10.0, 0.0]   # bottom-left corner of map in meters
+negate: 0           # 0 = black is occupied, 1 = white is occupied
+occupied_thresh: 0.65
+free_thresh: 0.196

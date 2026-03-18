@@ -1,0 +1,118 @@
+# #gz topic Keyboard inputs
+# - ros_topic_name: "/keyboard/keypress"
+#   gz_topic_name: "/keyboard/keypress"
+#   ros_type_name: "std_msgs/msg/Int32"
+#   gz_type_name: "gz.msgs.Int32"
+#   direction: ROS_TO_GZ
+  
+#   #gz topic Keyboard TeleopTwist
+# - ros_topic_name: "/cmd_vel"
+#   gz_topic_name: "/model/car/cmd_vel"
+#   ros_type_name: "geometry_msgs/msg/Twist"
+#   gz_type_name: "gz.msgs.Twist"
+#   direction: ROS_TO_GZ
+
+# gz topic published by the Simulator core
+- ros_topic_name: "clock"
+  gz_topic_name: "clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  gz_type_name: "gz.msgs.Clock"
+  direction: GZ_TO_ROS
+
+# gz topic published by JointState plugin
+- ros_topic_name: "joint_states"
+  gz_topic_name: "joint_states"
+  ros_type_name: "sensor_msgs/msg/JointState"
+  gz_type_name: "gz.msgs.Model"
+  direction: GZ_TO_ROS
+
+# # gz topic published by Ackermann plugin
+# - ros_topic_name: "odom"
+#   gz_topic_name: "odom"
+#   ros_type_name: "nav_msgs/msg/Odometry"
+#   gz_type_name: "gz.msgs.Odometry"
+#   direction: GZ_TO_ROS
+
+# # gz topic published by Ackermann plugin
+# - ros_topic_name: "tf"
+#   gz_topic_name: "tf"
+#   ros_type_name: "tf2_msgs/msg/TFMessage"
+#   gz_type_name: "gz.msgs.Pose_V"
+#   direction: GZ_TO_ROS
+
+# gz topic published by Sensors plugin (2D Lidar)
+- ros_topic_name: "scan"
+  gz_topic_name: "scan"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: GZ_TO_ROS
+
+# gz topic published by Sensors plugin (3D Lidar)
+- ros_topic_name: "cloud"
+  gz_topic_name: "cloud/points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  direction: GZ_TO_ROS
+
+# gz topic published by Sensors plugin (Front Camera)
+- ros_topic_name: "camera1/camera_info"
+  gz_topic_name: "camera1/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
+
+# gz topic published by Sensors plugin (Front Camera)
+- ros_topic_name: "camera1/image"
+  gz_topic_name: "camera1/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+
+# gz topic published by Sensors plugin (Front Depth Camera)
+- ros_topic_name: "camera1/depth_image"
+  gz_topic_name: "camera1/depth_image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+
+# gz topic published by Sensors plugin (Front Depth Camera)
+- ros_topic_name: "camera1/points"
+  gz_topic_name: "camera1/points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  direction: GZ_TO_ROS
+
+  # gz topic published by Sensors plugin (Right Camera)
+- ros_topic_name: "camera2/camera_info"
+  gz_topic_name: "camera2/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
+
+# gz topic published by Sensors plugin (Right Camera)
+- ros_topic_name: "camera2/image"
+  gz_topic_name: "camera2/image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+
+# gz topic published by Sensors plugin (Right Depth Camera)
+- ros_topic_name: "camera2/depth_image"
+  gz_topic_name: "camera2/depth_image"
+  ros_type_name: "sensor_msgs/msg/Image"
+  gz_type_name: "gz.msgs.Image"
+  direction: GZ_TO_ROS
+
+# gz topic published by Sensors plugin (Right Depth Camera)
+- ros_topic_name: "camera2/points"
+  gz_topic_name: "camera2/points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  direction: GZ_TO_ROS
+
+  #gz topic published by Sensors plugin (IMU)
+- ros_topic_name: "imu/data"
+  gz_topic_name: "imu/data"
+  ros_type_name: "sensor_msgs/msg/Imu"
+  gz_type_name: "gz.msgs.IMU"
+  direction: GZ_TO_ROS

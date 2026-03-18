@@ -1,0 +1,150 @@
+amcl:
+  ros__parameters:
+    use_sim_time: true
+    global_frame_id: map
+    odom_frame_id: ackermann_car/odom
+    base_frame_id: ackermann_car/base_footprint
+    tf_broadcast: true
+    # ============================================
+    # TOPICS
+    # ============================================
+    scan_topic: /scan
+    
+    # ============================================
+    # PARTICLE FILTER
+    # ============================================
+    # Fewer particles for faster performance
+    min_particles: 200
+    max_particles: 2000
+    
+    # Particle filter recovery (0.0 = disabled for now)
+    recovery_alpha_slow: 0.0
+    recovery_alpha_fast: 0.0
+    
+    # ============================================
+    # UPDATE THRESHOLDS
+    # ============================================
+    # Update more frequently for better tracking
+    update_min_d: 0.1      # Update every 10cm (was 0.2)
+    update_min_a: 0.1      # Update every ~6 degrees (was 0.2)
+    
+    # Resample particles every update
+    resample_interval: 1
+    
+    # ============================================
+    # TF PUBLISHING
+    # ============================================
+    # Broadcast map -> odom transform
+    
+    # More tolerant transform timing (critical for simulation)
+    transform_tolerance: 0.5  # 500ms tolerance (was 0.2)
+    
+    # ============================================
+    # LASER MODEL (CRITICAL FOR SCAN MATCHING!)
+    # ============================================
+    # Use likelihood field model (best for known maps)
+    laser_model_type: "likelihood_field"
+    
+    # Laser range limits (match your LIDAR)
+    laser_max_range: 12.0   # Maximum LIDAR range
+    laser_min_range: 0.1    # Minimum LIDAR range
+    
+    # How many beams to use (more = slower but more accurate)
+    max_beams: 60           # Use 60 beams (out of total scan)
+    
+    # Likelihood field parameters
+    laser_likelihood_max_dist: 2.0  # Maximum distance to consider obstacles (2m)
+    
+    # Laser measurement model weights
+    laser_z_hit: 0.95       # Weight for correct measurements (high = trust laser)
+    laser_z_short: 0.0      # Weight for short readings (disabled)
+    laser_z_max: 0.0        # Weight for max range (disabled)
+    laser_z_rand: 0.05      # Weight for random noise (low)
+    
+    # Laser hit standard deviation
+    laser_sigma_hit: 0.2    # 20cm uncertainty in laser measurements
+    
+    # ============================================
+    # ODOMETRY MODEL
+    # ============================================
+    # Use differential drive model (works for Ackermann too)
+    odom_model_type: "diff"
+    
+    # Odometry noise parameters (alpha1-4)
+    # Format: noise = alpha * motion
+    
+    # Alpha1: Rotation noise from rotation
+    # Higher = less trust in rotation measurements
+    odom_alpha1: 0.2
+    
+    # Alpha2: Rotation noise from translation
+    # How much rotation error accumulates from moving forward
+    odom_alpha2: 0.2
+    
+    # Alpha3: Translation noise from translation
+    # How much position error accumulates from moving forward
+    odom_alpha3: 0.2
+    
+    # Alpha4: Translation noise from rotation
+    # How much position error comes from turning
+    odom_alpha4: 0.2
+    
+    # ============================================
+    # INITIAL POSE
+    # ============================================
+    # Set initial pose automatically (match spawn location)
+    set_initial_pose: true
+    
+    initial_pose:
+      x: -20.0
+      y: 0.0
+      z: 0.0
+      yaw: 0.0
+    
+    # Initial covariance (uncertainty in initial pose)
+    initial_cov_xx: 0.25    # 0.5m standard deviation in X
+    initial_cov_yy: 0.25    # 0.5m standard deviation in Y
+    initial_cov_aa: 0.068   # ~15 degrees standard deviation in yaw
+    
+    # ============================================
+    # ADVANCED PARAMETERS
+    # ============================================
+    # Save pose updates to file (disabled)
+    save_pose_rate: 0.0
+    
+    # Always try to update (don't skip updates)
+    selective_resampling: false
+    
+    # Spatial and angular resolution for KLD sampling
+    spatial_resolution: 0.5
+    angular_resolution: 0.1
+    
+    # KLD sampling parameters
+    kld_err: 0.05
+    kld_z: 0.99
+
+# ============================================
+# EXPLANATION OF KEY PARAMETERS
+# ============================================
+#
+# Why these values work:
+#
+# 1. **transform_tolerance: 0.5**
+#    - Gazebo simulation time can lag
+#    - 500ms tolerance prevents TF lookup failures
+#
+# 2. **laser_likelihood_max_dist: 2.0**
+#    - Look for obstacles within 2 meters
+#    - Matches typical robot size and inflation
+#
+# 3. **laser_z_hit: 0.95**
+#    - Trust laser measurements highly
+#    - Good LIDAR in simulation is very accurate
+#
+# 4. **odom_alpha* = 0.2**
+#    - Moderate odometry noise
+#    - Ackermann steering is pretty accurate
+#
+# 5. **update_min_d: 0.1, update_min_a: 0.1**
+#    - Update frequently for responsive localization
+#    - 10cm / 6° is good for straight driving

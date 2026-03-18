@@ -1,0 +1,322 @@
+<?xml version="1.0"?>
+<robot name="ackermann_car">
+  <!-- ================= DIMENSIONS =================
+       Front track:  37.75in = 0.95885m (half: 0.479425m)
+       Rear track:   33in    = 0.8382m  (half: 0.4191m)
+       Wheelbase:    48in    = 1.2192m
+       Sensor height from base_link origin: 51in = 1.2954m
+       Sensor from rear axle: 18in = 0.4572m
+       Wheel radius: 8in = 0.2032m
+       Wheel width:  ~6in = 0.15m
+  ================================================== -->
+
+  <link name="base_footprint"/>
+
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0.6 0 0.25"/>
+      <mass value="50.0"/>
+      <!-- box 1.2 x 0.9 x 0.5, m=50 -->
+      <inertia ixx="4.4167" ixy="0" ixz="0"
+               iyy="7.0417" iyz="0"
+               izz="9.3750"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.6 0 0.25"/>
+      <geometry>
+        <box size="1.2 0.9 0.5"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0.6 0 0.25"/>
+      <geometry>
+        <box size="1.2 0.9 0.5"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="base_footprint_joint" type="fixed">
+    <origin xyz="0 0 0.1905"/>
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+  </joint>
+
+  <!-- ================= REAR WHEELS ================= -->
+  <link name="rear_left_wheel">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="3.0"/>
+      <!-- cylinder r=0.2032, h=0.15, m=3 -->
+      <inertia ixx="0.03659" ixy="0" ixz="0"
+               iyy="0.03659" iyz="0"
+               izz="0.06194"/>
+    </inertial>
+    <visual>
+      <origin rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.2032" length="0.15"/></geometry>
+    </visual>
+    <collision>
+      <origin rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.2032" length="0.15"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="rear_left_wheel_joint" type="continuous">
+    <origin xyz="0 0.4191 0"/>
+    <parent link="base_link"/>
+    <child link="rear_left_wheel"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <link name="rear_right_wheel">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="3.0"/>
+      <inertia ixx="0.03659" ixy="0" ixz="0"
+               iyy="0.03659" iyz="0"
+               izz="0.06194"/>
+    </inertial>
+    <visual>
+      <origin rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.2032" length="0.15"/></geometry>
+    </visual>
+    <collision>
+      <origin rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.2032" length="0.15"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="rear_right_wheel_joint" type="continuous">
+    <origin xyz="0 -0.4191 0"/>
+    <parent link="base_link"/>
+    <child link="rear_right_wheel"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- ================= FRONT STEER LINKS ================= -->
+  <link name="front_left_steer_link">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.5"/>
+      <inertia ixx="0.001" ixy="0" ixz="0"
+               iyy="0.001" iyz="0"
+               izz="0.001"/>
+    </inertial>
+  </link>
+
+  <link name="front_right_steer_link">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.5"/>
+      <inertia ixx="0.001" ixy="0" ixz="0"
+               iyy="0.001" iyz="0"
+               izz="0.001"/>
+    </inertial>
+  </link>
+
+  <joint name="front_left_steering_joint" type="revolute">
+    <origin xyz="1.2192 0.479425 0"/>
+    <parent link="base_link"/>
+    <child link="front_left_steer_link"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.6" upper="0.6" effort="50" velocity="2"/>
+  </joint>
+
+  <joint name="front_right_steering_joint" type="revolute">
+    <origin xyz="1.2192 -0.479425 0"/>
+    <parent link="base_link"/>
+    <child link="front_right_steer_link"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-0.6" upper="0.6" effort="50" velocity="2"/>
+  </joint>
+
+  <!-- ================= FRONT WHEELS ================= -->
+  <link name="front_left_wheel">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="3.0"/>
+      <inertia ixx="0.03659" ixy="0" ixz="0"
+               iyy="0.03659" iyz="0"
+               izz="0.06194"/>
+    </inertial>
+    <visual>
+      <origin rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.2032" length="0.15"/></geometry>
+    </visual>
+    <collision>
+      <origin rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.2032" length="0.15"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="front_left_wheel_joint" type="continuous">
+    <parent link="front_left_steer_link"/>
+    <child link="front_left_wheel"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <link name="front_right_wheel">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="3.0"/>
+      <inertia ixx="0.03659" ixy="0" ixz="0"
+               iyy="0.03659" iyz="0"
+               izz="0.06194"/>
+    </inertial>
+    <visual>
+      <origin rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.2032" length="0.15"/></geometry>
+    </visual>
+    <collision>
+      <origin rpy="1.5708 0 0"/>
+      <geometry><cylinder radius="0.2032" length="0.15"/></geometry>
+    </collision>
+  </link>
+
+  <joint name="front_right_wheel_joint" type="continuous">
+    <parent link="front_right_steer_link"/>
+    <child link="front_right_wheel"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+
+  <!-- ================= LIDAR ================= -->
+  <link name="lidar_link">
+    <inertial>
+      <origin xyz="0 0 0"/>
+      <mass value="0.125"/>
+      <!-- cylinder r=0.05, h=0.07, m=0.125 -->
+      <inertia ixx="0.000129" ixy="0" ixz="0"
+               iyy="0.000129" iyz="0"
+               izz="0.000156"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.05" length="0.07"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.05" length="0.07"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <joint name="lidar_joint" type="fixed">
+    <origin xyz="0.4572 0 0.5"/>
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+  </joint>
+
+  <!-- ================= GAZEBO PLUGINS ================= -->
+
+  <!-- Ackermann Steering -->
+  <gazebo>
+    <plugin filename="libgz-sim-ackermann-steering-system.so"
+            name="gz::sim::systems::AckermannSteering">
+      <topic>/cmd_vel</topic>
+      <left_joint>rear_left_wheel_joint</left_joint>
+      <right_joint>rear_right_wheel_joint</right_joint>
+      <left_steering_joint>front_left_steering_joint</left_steering_joint>
+      <right_steering_joint>front_right_steering_joint</right_steering_joint>
+      <wheel_base>1.2192</wheel_base>
+      <wheel_separation>0.8382</wheel_separation>
+      <wheel_radius>0.2032</wheel_radius>
+      <steering_limit>0.6</steering_limit>
+      <odometry_frame>ackermann_car/odom</odometry_frame>
+      <robot_base_frame>ackermann_car/base_footprint</robot_base_frame>
+      <publish_odom_tf>false</publish_odom_tf> 
+    </plugin>
+  </gazebo>
+
+  <!-- Joint State Publisher -->
+  <gazebo>
+    <plugin filename="libgz-sim-joint-state-publisher-system.so"
+            name="gz::sim::systems::JointStatePublisher">
+      <topic>/joint_states</topic>
+    </plugin>
+  </gazebo>
+  <gazebo>
+    <plugin filename="libgz-sim-odometry-publisher-system.so"
+            name="gz::sim::systems::OdometryPublisher">
+      <odom_frame>ackermann_car/odom</odom_frame>
+      <robot_base_frame>ackermann_car/base_footprint</robot_base_frame>
+      <odom_topic>/carodomfromGazebo</odom_topic>
+      <odom_publish_frequency>50</odom_publish_frequency>
+    </plugin>
+  </gazebo>
+  <!-- ================= WHEEL FRICTION =================
+       mu1 = longitudinal (rolling direction) — high for traction
+       mu2 = lateral (perpendicular) — lower to allow natural Ackermann slip
+       kp/kd = contact stiffness/damping — prevents wheel sinking
+  ================================================== -->
+
+  <gazebo reference="rear_left_wheel">
+    <mu1>0.9</mu1>
+    <mu2>0.9</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>1.0</maxVel>
+  </gazebo>
+
+  <gazebo reference="rear_right_wheel">
+    <mu1>0.9</mu1>
+    <mu2>0.9</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>1.0</maxVel>
+  </gazebo>
+
+  <gazebo reference="front_left_wheel">
+    <mu1>0.9</mu1>
+    <mu2>0.9</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>1.0</maxVel>
+  </gazebo>
+
+  <gazebo reference="front_right_wheel">
+    <mu1>0.9</mu1>
+    <mu2>0.9</mu2>
+    <kp>1000000.0</kp>
+    <kd>100.0</kd>
+    <minDepth>0.001</minDepth>
+    <maxVel>1.0</maxVel>
+  </gazebo>
+
+  <!-- ================= LIDAR SENSOR ================= -->
+  <gazebo reference="lidar_link">
+    <sensor name="lidar" type="gpu_lidar">
+      <pose>0 0 0 0 0 0</pose>
+      <topic>/scan</topic>
+      <update_rate>10</update_rate>
+      <lidar>
+        <scan>
+          <horizontal>
+            <samples>360</samples>
+            <resolution>1</resolution>
+            <min_angle>-3.14159</min_angle>
+            <max_angle>3.14159</max_angle>
+          </horizontal>
+        </scan>
+        <range>
+          <min>0.12</min>
+          <max>30.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </lidar>
+      <always_on>1</always_on>
+      <visualize>true</visualize>
+    </sensor>
+  </gazebo>
+
+</robot>

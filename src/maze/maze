@@ -1,0 +1,90 @@
+import random
+import matplotlib.pyplot as plt
+
+# Step 1: Generate Maze
+def generate_maze(width, height):
+    maze = [[0 for _ in range(width)] for _ in range(height)]
+    start_x, start_y = 1, 1
+    maze[start_y][start_x] = 1
+    directions = [(0,2), (2,0), (0,-2), (-2,0)]
+
+    def carve(x, y):
+        random.shuffle(directions)
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            if 1 <= nx < width-1 and 1 <= ny < height-1:
+                if maze[ny][nx] == 0:
+                    maze[ny][nx] = 1
+                    maze[y + dy//2][x + dx//2] = 1
+                    carve(nx, ny)
+
+    carve(start_x, start_y)
+
+    # Ensure entrance and exit are open
+    maze[1][1] = 1  # entrance
+    maze[height-2][width-2] = 1  # exit
+    return maze, (1,1), (width-2, height-2)
+
+# Step 2: Export Maze to SDF
+def maze_to_sdf(maze, block_size=1.0):
+    sdf_template = """<?xml version="1.0"?>
+<sdf version="1.7">
+  <model name="maze">
+    <static>true</static>
+    {}
+  </model>
+</sdf>
+"""
+    links = []
+    for y, row in enumerate(maze):
+        for x, cell in enumerate(row):
+            if cell == 0:  # wall
+                pose = f"{x*block_size-10} {y*block_size-10} {block_size/2} 0 0 0"
+                link = f"""
+    <link name="wall_{x}_{y}">
+      <pose>{pose}</pose>
+      <collision name="collision">
+        <geometry>
+          <box><size>{block_size} {block_size} {block_size}</size></box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box><size>{block_size} {block_size} {block_size}</size></box>
+        </geometry>
+        <material><ambient>0.5 0.5 0.5 1</ambient></material>
+      </visual>
+    </link>"""
+                links.append(link)
+    return sdf_template.format("\n".join(links))
+
+# Step 3: Save Maze as PNG with Entrance & Exit
+def save_maze_png(maze, entrance, exit, filename="maze.png"):
+    plt.figure(figsize=(6,6))
+    plt.imshow(maze, cmap="gray_r")  # 0 = black wall, 1 = white path
+    
+    # Mark entrance (green) and exit (red)
+    ey, ex = entrance
+    xy, xx = exit
+    plt.scatter(ex, ey, c="green", s=200, marker="o", label="Entrance")
+    plt.scatter(xx, xy, c="red", s=200, marker="o", label="Exit")
+    
+    plt.axis("off")
+    plt.legend(loc="upper right")
+    plt.savefig(filename, bbox_inches="tight", pad_inches=0)
+    plt.close()
+
+# Main
+if __name__ == "__main__":
+    width, height = 11, 11  # must be odd numbers
+    maze, entrance, exit = generate_maze(width, height)
+    
+    # Save SDF
+    sdf_content = maze_to_sdf(maze)
+    with open("maze_model.sdf", "w") as f:
+        f.write(sdf_content)
+    print("✅ Maze SDF saved to maze_model.sdf")
+
+    # Save PNG
+    save_maze_png(maze, entrance, exit, "maze.png")
+    print("✅ Maze image saved to maze.png with entrance and exit marked")

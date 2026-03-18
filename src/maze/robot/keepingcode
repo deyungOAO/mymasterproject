@@ -1,0 +1,202 @@
+<!--wall-->
+        <include>
+            <uri>file:///home/deyung/ros2_ws/src/myproject/maze/maze_model.sdf</uri>
+            <pose>0 0 0 0 0 0</pose> <!-- Maze at origin -->
+        </include>
+        <!--build wall for test sensors-->
+        <model name='wall'>
+            <static>true</static>
+            <pose>10 0 0 0 0 0</pose><!--pose relative to the world-->
+            <link name='box'>
+                <visual name='visual'>
+                    <geometry>
+                        <box>
+                            <size>0.5 20.0 2.0</size>
+                        </box>
+                    </geometry>
+                    <!--let's add color to our link-->
+                    <material>
+                        <ambient>0.0 0.0 1.0 1</ambient>
+                        <diffuse>0.0 0.0 1.0 1</diffuse>
+                        <specular>0.0 0.0 1.0 1</specular>
+                    </material>
+                </visual>
+                <collision name='collision'>
+                    <geometry>
+                        <box>
+                            <size>0.5 10.0 2.0</size>
+                        </box>
+                    </geometry>
+                </collision>
+                <sensor name='sensor_contact' type='contact'>
+                    <contact>
+                        <collision>collision</collision>
+                    </contact>
+                </sensor>
+            </link>
+            <plugin 
+                filename="gz-sim-touchplugin-system"
+                name="gz::sim::systems::TouchPlugin">
+                <target>vehicle_blue</target>
+                <namespace>wall</namespace>
+                <time>0.001</time>
+                <enabled>true</enabled>
+            </plugin>
+            <plugin 
+                filename="gz-sim-triggered-publisher-system"
+                name="gz::sim::systems::TriggeredPublisher">
+                <input type="gz.msgs.Boolean" topic="/wall/touched">
+                    <match>data: true</match>
+                </input>
+                <output type="gz.msgs.Twist" topic="/cmd_vel">
+                    linear: {x: -20.0}, angular: {z: 0.0}
+                </output>
+            </plugin>
+        </model>
+        <model name='wall2'>
+            <static>true</static>
+            <pose>-10 0 0 0 0 0</pose><!--pose relative to the world-->
+            <link name='box'>
+                <visual name='visual'>
+                    <geometry>
+                        <box>
+                            <size>0.5 20.0 2.0</size>
+                        </box>
+                    </geometry>
+                    <!--let's add color to our link-->
+                    <material>
+                        <ambient>0.0 0.0 1.0 1</ambient>
+                        <diffuse>0.0 0.0 1.0 1</diffuse>
+                        <specular>0.0 0.0 1.0 1</specular>
+                    </material>
+                </visual>
+                <collision name='collision'>
+                    <geometry>
+                        <box>
+                            <size>0.5 10.0 2.0</size>
+                        </box>
+                    </geometry>
+                </collision>
+                <sensor name='sensor_contact' type='contact'>
+                    <contact>
+                        <collision>collision</collision>
+                    </contact>
+                </sensor>
+            </link>
+            <plugin 
+                filename="gz-sim-touchplugin-system"
+                name="gz::sim::systems::TouchPlugin">
+                <target>vehicle_blue</target>
+                <namespace>wall</namespace>
+                <time>0.001</time>
+                <enabled>true</enabled>
+            </plugin>
+            <plugin 
+                filename="gz-sim-triggered-publisher-system"
+                name="gz::sim::systems::TriggeredPublisher">
+                <input type="gz.msgs.Boolean" topic="/wall/touched">
+                    <match>data: true</match>
+                </input>
+                <output type="gz.msgs.Twist" topic="/cmd_vel">
+                    linear: {x: -20.0}, angular: {z: 0.0}
+                </output>
+            </plugin>
+        </model>
+        <model name='wall3'>
+            <static>true</static>
+            <pose>0 10 0 0 0 1.57</pose><!--pose relative to the world-->
+            <link name='box'>
+                <visual name='visual'>
+                    <geometry>
+                        <box>
+                            <size>0.5 20.0 2.0</size>
+                        </box>
+                    </geometry>
+                    <!--let's add color to our link-->
+                    <material>
+                        <ambient>0.0 0.0 1.0 1</ambient>
+                        <diffuse>0.0 0.0 1.0 1</diffuse>
+                        <specular>0.0 0.0 1.0 1</specular>
+                    </material>
+                </visual>
+                <collision name='collision'>
+                    <geometry>
+                        <box>
+                            <size>0.5 10.0 2.0</size>
+                        </box>
+                    </geometry>
+                </collision>
+                <sensor name='sensor_contact' type='contact'>
+                    <contact>
+                        <collision>collision</collision>
+                    </contact>
+                </sensor>
+            </link>
+            <plugin 
+                filename="gz-sim-touchplugin-system"
+                name="gz::sim::systems::TouchPlugin">
+                <target>vehicle_blue</target>
+                <namespace>wall</namespace>
+                <time>0.001</time>
+                <enabled>true</enabled>
+            </plugin>
+            <plugin 
+                filename="gz-sim-triggered-publisher-system"
+                name="gz::sim::systems::TriggeredPublisher">
+                <input type="gz.msgs.Boolean" topic="/wall/touched">
+                    <match>data: true</match>
+                </input>
+                <output type="gz.msgs.Twist" topic="/cmd_vel">
+                    linear: {x: -20.0}, angular: {z: 0.0}
+                </output>
+            </plugin>
+        </model>
+        <model name='wall4'>
+            <static>true</static>
+            <pose>2 -10 0 0 0 1.57</pose><!--for exit setting (1 is for smaller exit) -->
+            <link name='box'>
+                <visual name='visual'>
+                    <geometry>
+                        <box>
+                            <size>0.5 16.5 2.0</size><!--17.5 for 1 exit setting-->
+                        </box>
+                    </geometry>
+                    <!--let's add color to our link-->
+                    <material>
+                        <ambient>0.0 0.0 1.0 1</ambient>
+                        <diffuse>0.0 0.0 1.0 1</diffuse>
+                        <specular>0.0 0.0 1.0 1</specular>
+                    </material>
+                </visual>
+                <collision name='collision'>
+                    <geometry>
+                        <box>
+                            <size>0.5 10.0 2.0</size>
+                        </box>
+                    </geometry>
+                </collision>
+                <sensor name='sensor_contact' type='contact'>
+                    <contact>
+                        <collision>collision</collision>
+                    </contact>
+                </sensor>
+            </link>
+            <plugin 
+                filename="gz-sim-touchplugin-system"
+                name="gz::sim::systems::TouchPlugin">
+                <target>vehicle_blue</target>
+                <namespace>wall</namespace>
+                <time>0.001</time>
+                <enabled>true</enabled>
+            </plugin>
+            <plugin 
+                filename="gz-sim-triggered-publisher-system"
+                name="gz::sim::systems::TriggeredPublisher">
+                <input type="gz.msgs.Boolean" topic="/wall/touched">
+                    <match>data: true</match>
+                </input>
+                <output type="gz.msgs.Twist" topic="/cmd_vel">
+                    linear: {x: -20.0}, angular: {z: 0.0}
+                </output>
+            </plugin>
+        </model>        

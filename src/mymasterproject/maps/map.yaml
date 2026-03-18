@@ -1,0 +1,12 @@
+
+image: map.png
+resolution: 0.05                # meters/pixel
+
+# (x, y, yaw) of cell (0,0) in the map frame, in meters/radians.
+# We want bottom-left pixel to be world (-20, -10).
+origin: [-20.0, -10.0, 0.0]
+
+negate: 0                       # 0 = black is occupied, white is free
+occupied_thresh: 0.65
+free_thresh: 0.25
+frame_id: map

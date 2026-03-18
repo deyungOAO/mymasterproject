@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<sdf version="1.8">
+  <world name="car_maze_world">
+    <include>
+      <uri>file://maze/maze_model.sdf</uri>
+      <pose>0 0 0 0 0 0</pose> <!-- Maze at origin -->
+    </include>
+
+    <include>
+      <uri>file://robot/sensor_tutorial.sdf</uri>
+      <pose>1 1 0 0 0 0</pose> <!-- Car near entrance -->
+    </include>
+
+  </world>
+</sdf>

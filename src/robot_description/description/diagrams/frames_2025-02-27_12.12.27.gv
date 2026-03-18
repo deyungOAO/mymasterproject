@@ -1,0 +1,18 @@
+digraph G {
+"odom" -> "base_link"[label=" Broadcaster: default_authority\nAverage rate: 980.805\nBuffer length: 1.615\nMost recent transform: 180.116\nOldest transform: 178.501\n"];
+"chassis" -> "camera_link"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"base_link" -> "chassis"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"camera_link" -> "camera_link_optical"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"chassis" -> "imu_link"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"chassis" -> "laser_frame"[label=" Broadcaster: default_authority\nAverage rate: 10000.0\nBuffer length: 0.0\nMost recent transform: 0.0\nOldest transform: 0.0\n"];
+"left_wheel_steering" -> "front_left_wheel"[label=" Broadcaster: default_authority\nAverage rate: 20.632\nBuffer length: 1.551\nMost recent transform: 180.08\nOldest transform: 178.529\n"];
+"chassis" -> "left_wheel_steering"[label=" Broadcaster: default_authority\nAverage rate: 20.632\nBuffer length: 1.551\nMost recent transform: 180.08\nOldest transform: 178.529\n"];
+"right_wheel_steering" -> "front_right_wheel"[label=" Broadcaster: default_authority\nAverage rate: 20.632\nBuffer length: 1.551\nMost recent transform: 180.08\nOldest transform: 178.529\n"];
+"chassis" -> "right_wheel_steering"[label=" Broadcaster: default_authority\nAverage rate: 20.632\nBuffer length: 1.551\nMost recent transform: 180.08\nOldest transform: 178.529\n"];
+"chassis" -> "rear_left_wheel"[label=" Broadcaster: default_authority\nAverage rate: 20.632\nBuffer length: 1.551\nMost recent transform: 180.08\nOldest transform: 178.529\n"];
+"chassis" -> "rear_right_wheel"[label=" Broadcaster: default_authority\nAverage rate: 20.632\nBuffer length: 1.551\nMost recent transform: 180.08\nOldest transform: 178.529\n"];
+edge [style=invis];
+ subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
+"Recorded at time: 1740687147.3525152"[ shape=plaintext ] ;
+}->"odom";
+}

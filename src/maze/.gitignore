@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+
+# Generated data
+*.csv
+*.png
+
+# Build / temp folders
+build/
+save/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

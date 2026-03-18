@@ -1,0 +1,94 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <!-- Depth camera's urdf -->
+    <joint name="camera_joint" type="fixed">
+        <parent link="chassis"/>
+        <child link="camera_link"/>
+        <origin xyz="0 0 0.5" rpy="0 0 0"/>
+    </joint>
+    <link name="camera_link"></link>
+
+    <!-- Front camera Optical link -->
+    <joint name="front_camera_joint" type="fixed">
+        <parent link="camera_link"/>
+        <child link="front_camera"/>
+        <origin xyz="0.5 0 0" rpy="0 0 0"/>
+    </joint>
+    <link name="front_camera">
+        <visual>
+            <geometry>
+                <box size="0.04 0.04 0.04"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+    </link>
+    <!-- Front camera Gazebo Sensor Plugin -->
+    <gazebo reference="front_camera">
+        <material>Gazebo/Black</material>
+
+        <sensor name="rgbd_camera1" type="rgbd_camera">
+            <pose> 0 0 0 0 0 0 </pose>
+            <always_on>true</always_on>
+            <visualize>true</visualize>
+            <update_rate>30</update_rate>
+            <topic>camera1</topic>
+            <gz_frame_id>camera_link</gz_frame_id>
+            <camera>
+                <optical_frame_id>front_camera</optical_frame_id>
+                <camera_info_topic>camera/camera_info</camera_info_topic>
+                <horizontal_fov>1.52</horizontal_fov>
+                <image>
+                    <format>R8G8B8</format>
+                    <width>320</width>
+                    <height>240</height>
+                </image>
+                <clip>
+                    <near>0.05</near>
+                    <far>6.0</far>
+                </clip>
+            </camera>
+        </sensor>
+    </gazebo>
+    
+       <!-- Right camera Optical link -->
+    <joint name="right_camera_joint" type="fixed">
+        <parent link="camera_link"/>
+        <child link="right_camera"/>
+        <origin xyz="0 -0.27 0" rpy="0 0 -1.57"/>
+    </joint>
+    <link name="right_camera">
+        <visual>
+            <geometry>
+                <box size="0.04 0.04 0.04"/>
+            </geometry>
+            <material name="black"/>
+        </visual>
+    </link>
+    <!-- Right camera Gazebo Sensor Plugin -->
+    <gazebo reference="right_camera">
+        <material>Gazebo/Black</material>
+
+        <sensor name="rgbd_camera2" type="rgbd_camera">
+            <pose> 0 0 0 0 0 0 </pose>
+            <always_on>true</always_on>
+            <visualize>true</visualize>
+            <update_rate>30</update_rate>
+            <topic>camera2</topic>
+            <gz_frame_id>camera_link</gz_frame_id>
+            <camera>
+                <optical_frame_id>right_camera</optical_frame_id>
+                <camera_info_topic>camera/camera_info</camera_info_topic>
+                <horizontal_fov>1.52</horizontal_fov>
+                <image>
+                    <format>R8G8B8</format>
+                    <width>320</width>
+                    <height>240</height>
+                </image>
+                <clip>
+                    <near>0.05</near>
+                    <far>6.0</far>
+                </clip>
+            </camera>
+        </sensor>
+    </gazebo>
+</robot>
